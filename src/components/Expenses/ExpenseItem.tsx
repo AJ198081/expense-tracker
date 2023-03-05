@@ -24,7 +24,7 @@ const ExpenseItem = ({expense}: ExpenseItemChildrenProps): JSX.Element => {
 
     const [title, setTitle] = useState<string>(expense.title);
 
-    const clickEventHandler = () => {
+    const clickEventHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
         title === expense.title
             ? setTitle(prevState => 'Button Clicked!')
             : setTitle(prevState => expense.title);

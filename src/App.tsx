@@ -1,5 +1,5 @@
-import ExpenseItem from "./components/Expenses/ExpenseItem";
 import Expenses from "./components/Expenses/Expenses";
+import NewExpense from "./components/NewExpense/NewExpense";
 
 interface AppChildrenProps {
     children: JSX.Element;
@@ -21,6 +21,7 @@ const App = () => {
 
     return (
         <div>
+            <NewExpense />
             <Expenses expenses={expenses} />
         </div>
     )

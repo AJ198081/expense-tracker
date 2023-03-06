@@ -1,22 +1,37 @@
 import {ExpenseType} from "../../App";
-import ExpenseItem from "./ExpenseItem";
 import "./Expenses.css"
 import Card from "../UI/Card";
+import {useState} from "react";
+import ExpenseFilter from "./ExpenseFilter";
+import ExpensesList from "./ExpensesList";
+import ExpensesChart from "./ExpensesChart";
 
 interface ExpensesProps {
     expenses: ExpenseType[];
 }
 
 const Expenses = ({expenses}: ExpensesProps): JSX.Element => {
-    const renderExpenses = expenses.map((expense, index) => {
-        return <div key={expense.id}>
-            <ExpenseItem expense={expense} />
-        </div>
+
+    const [filteredYear, setFilteredYear] = useState('All');
+
+    const filterChangeHandler = (selectedYear: string) => {
+        setFilteredYear(selectedYear);
+    }
+
+    const filteredExpenses = expenses.filter(expense => {
+        return expense.date.getFullYear().toString() === filteredYear;
+    })
+
+    const yearsOfExpenses: string[] = expenses.map(expense => {
+        return expense.date.getFullYear().toString();
     });
 
+    let expensesToBePlotted = filteredYear === 'All' ? expenses : filteredExpenses;
     return <Card className={"expenses"}>
-        {renderExpenses}
-    </Card>
+        <ExpenseFilter onChangeFilter={filterChangeHandler} selected={filteredYear} yearsOfExpenses={yearsOfExpenses}/>
+        <ExpensesChart expenses={expensesToBePlotted} />
+        <ExpensesList expenses={expenses} filteredYear={filteredYear} />
+    </Card>;
 }
 
 export default Expenses;

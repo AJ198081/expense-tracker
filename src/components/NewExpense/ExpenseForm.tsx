@@ -1,45 +1,16 @@
 import {ChangeEvent, useCallback, useState} from "react";
 import ApplicationConstants from "../../constants/ApplicationConstants";
+import {FormState, initialState} from "./NewExpense";
 
-
-interface FormState {
-    enteredTitle: string;
-    enteredAmount: number;
-    enteredDate: Date;
-
+interface ExpenseFormProps {
+    onSubmitHandler: (userInput: FormState) => void
 }
 
-const ExpenseForm = () => {
+const ExpenseForm = ({ onSubmitHandler }: ExpenseFormProps): JSX.Element => {
 
-    const options: Intl.DateTimeFormatOptions = {
-        dateStyle: "full"
-    };
-    const dateTimeFormat = new Intl.DateTimeFormat(`en-${ApplicationConstants.locale}`, options);
-
-    const [userInput, setUserInput] = useState<FormState>({
-                                                              enteredTitle: '',
-                                                              enteredAmount: 0,
-                                                              enteredDate: new Date()
-                                                          });
-
-
-    const submitHandler = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-
-        const expenseData = {
-            title: userInput.enteredTitle,
-            amount: userInput.enteredAmount,
-            date: userInput.enteredDate
-        }
-
-    };
+    const [userInput, setUserInput] = useState<FormState>(initialState);
 
     const titleChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
-        /*setUserInput({
-                         ...userInput,
-                         enteredTitle: event.target.value
-                     })*/
-
         setUserInput((prevState) => {
             return {
                 ...prevState,
@@ -48,7 +19,6 @@ const ExpenseForm = () => {
         })
     }
 
-
     const amountChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
         setUserInput({
                          ...userInput,
@@ -56,38 +26,38 @@ const ExpenseForm = () => {
                      });
     }
 
+
     const dateChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
         setUserInput({
-                         ...userInput, enteredDate: new Date(Date.parse(event.target.value))
+                         ...userInput, enteredDate: event.target.value
                      })
     }
 
-    return <form onSubmit={event => submitHandler}>
 
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        onSubmitHandler(userInput);
+        setUserInput(initialState)
+    };
+
+    return <form onSubmit={handleSubmit}>
         <div>
-
             <div className={"new-expense__control"}>
                 <label>Title</label>
                 <input type="text" value={userInput.enteredTitle} onChange={titleChangeHandler}/>
             </div>
-
             <div className={"new-expense__control"}>
                 <label>Amount</label>
                 <input type="number" min={"0.01"} step={"0.01"} value={userInput.enteredAmount} onChange={amountChangeHandler}/>
             </div>
-
             <div className={"new-expense__control"}>
                 <label>Date</label>
-                <input type="date" min={"01-01-1900"} max={"31-12-2023"} value={userInput.enteredDate.toLocaleDateString()} onChange={dateChangeHandler}/>
+                <input type="date" min={"1900-01-01"} max={"2023-12-31"} value={userInput.enteredDate} onChange={dateChangeHandler}/>
             </div>
-
             <div className={"new-expense__actions"}>
                 <button type={"submit"}>Submit</button>
             </div>
-
-
         </div>
-
     </form>
 }
 

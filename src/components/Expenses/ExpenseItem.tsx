@@ -14,7 +14,6 @@ const options: Intl.DateTimeFormatOptions = {
     day: 'numeric'
 };
 
-
 interface StateType {
     title: string;
     setTitle: React.Dispatch<React.InputHTMLAttributes<string>>
@@ -33,7 +32,7 @@ const ExpenseItem = ({expense}: ExpenseItemChildrenProps): JSX.Element => {
     return <Card className={'expense-item'}>
         <ExpenseDate date={expense.date as Date}/>
         <div className={"expense-item__description"}>
-            <h2>{expense.title}</h2>
+            <h2>{title}</h2>
             <div className={"expense-item__price"}>${expense.amount}</div>
         </div>
         <button className={"button is-primary"} onClick={clickEventHandler}>Change Title</button>

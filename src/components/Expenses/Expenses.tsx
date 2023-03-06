@@ -8,9 +8,8 @@ interface ExpensesProps {
 }
 
 const Expenses = ({expenses}: ExpensesProps): JSX.Element => {
-
     const renderExpenses = expenses.map((expense, index) => {
-        return <div key={index}>
+        return <div key={expense.id}>
             <ExpenseItem expense={expense} />
         </div>
     });
